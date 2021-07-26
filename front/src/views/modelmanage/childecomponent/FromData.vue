@@ -145,6 +145,7 @@ export default {
       //  rules: CleanDataManageRules,
       isClear:false
     };
+    
   },
   mounted() {
   

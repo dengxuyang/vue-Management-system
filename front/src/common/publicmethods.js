@@ -80,3 +80,4 @@ export function getWeek() {
     let wk = new Date().getDay();
     return weeks[wk];
   }
+  

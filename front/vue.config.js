@@ -1,7 +1,6 @@
 const path = require("path");
 const resolve = dir => path.join(__dirname, dir);
 const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
-//富文本
 module.exports = {
     publicPath: IS_PROD ? '././' : '/',
     chainWebpack: config => {

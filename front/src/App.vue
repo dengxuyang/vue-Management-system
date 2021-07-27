@@ -11,7 +11,7 @@
 </template>
 <script>
 import MainTabNav from "@components/common/maintabnav/MainTabNav";
-import LeftNavBar from "@components/content/leftnavbar/LeftNavBar";
+import LeftNavBar from "@components/common/leftnavbar/LeftNavBar";
 
 export default {
   name: "App",

@@ -64,7 +64,7 @@
 //标签页组件
 import MainTabBar from "@components/content/maintabbar/MainTabBar";
 //表格组件
-import TableComp from "@components/common/tablecomp/TableComp";
+import TableComp from "@components/content/tablecomp/TableComp";
 //表单组件
 import FromData from "./childecomponent/FromData";
 

@@ -131,7 +131,16 @@ a {
   /* padding-top: 26px;
   padding-left:34px ; */
 }
-
+.anchorBL {
+  display: none !important
+}
 /* #tab-tree{
   width: 200px !important;
 } */
+
+.w-e-toolbar{
+  z-index: 2 !important;
+}
+.w-e-text-container {
+  z-index: 1 !important;
+}

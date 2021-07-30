@@ -106,6 +106,7 @@ export default {
       isEdit: false,
       currentNav: {},
       fieldData: [],
+      showFieldData: [],
       form: {},
       selectData: {},
       fieldMap: {},
@@ -135,11 +136,11 @@ export default {
       this.searchKey = "";
       return this.$store.state.currentNav;
     },
-    showFieldData() {
-      return this.fieldData.filter((val) => {
-        return val.show_type != "0";
-      });
-    },
+    // showFieldData() {
+    //   return this.fieldData.filter((val) => {
+    //     return val.show_type != "0";
+    //   });
+    // },
   },
   watch: {
     //监听点击菜单
@@ -165,6 +166,10 @@ export default {
       getResourcefield(params)
         .then((result) => {
           this.fieldData = result.data.list;
+          this.showFieldData = this.fieldData.filter((val) => {
+            return val.show_type != "0";
+          });
+         
           if (
             this.fieldData == 0 ||
             this.fieldData[0].code != this.currentNav.index
@@ -209,6 +214,18 @@ export default {
         .catch((err) => {
           this.showTabLoading = false;
         });
+    },
+    getMap() {
+      let fieldData = [...this.showFieldData]
+      fieldData.forEach((item, index) => {
+        if (index + 1 < fieldData.length && fieldData[index + 1].name != '获取定位' && item.en_name == "latitude") {
+          //this.fielddata.push({name:" ",show_type:11})
+          this.showFieldData.splice(index + 1, 0, { name: "获取定位", show_type: 11 })
+
+        } else if (index + 1 > fieldData.length && item.en_name == "latitude") {
+          this.showFieldData.push({ name: "获取定位", show_type: 11 })
+        }
+      })
     },
     //处理显示的字段
     handleColumn(dataField) {
@@ -275,6 +292,7 @@ export default {
       Object.keys(this.rules).forEach((key) => {
         this.rules[key] = "";
       });
+      
       this.showFieldData.forEach((item, index) => {
         //获取字段类型map 在判断是那种数据类型中使用
         this.fieldMap[item.en_name] = item.type;
@@ -366,6 +384,7 @@ export default {
     //点击编辑
     editRow(row, field) {
       this.form = JSON.parse(JSON.stringify(row));
+      this.getMap()
       //点击编辑时标签页title
       this.tabEditLabel = row[field] + "-编辑";
       this.activename = "editpage";
@@ -418,6 +437,7 @@ export default {
     },
     //点击添加按钮
     handleAdd() {
+      this.getMap()
       this.tabEditLabel = "新增";
       this.activename = "editpage";
       this.$refs.tabbar.activeName = "editpage";

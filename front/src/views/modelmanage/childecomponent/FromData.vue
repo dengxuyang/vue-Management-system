@@ -18,9 +18,10 @@
             :label="`${item.name}：`"
             :prop="item.en_name"
           >
+
             <!-- 文本框 -->
             <el-input
-              v-if="item.show_type == 1"
+              v-if="item.show_type==1"
               v-model="form[item.en_name]"
             ></el-input>
             <!-- 单选按钮 -->
@@ -87,12 +88,14 @@
             ></el-date-picker>
              <!-- 富文本 -->
            <editor v-else-if="item.show_type == 8"  v-model="form[item.en_name]" :isClear="isClear" ></editor>
+           <map-for-lon-lat @chageLatitudeNndLongitude="chageLatitudeNndLongitude(arguments)" :form="form" v-else-if="item.show_type == 11"></map-for-lon-lat>
             <!-- 文件上传 -->
             <file-upload
               v-else-if="item.show_type == 10"
               :filesrc="form[item.en_name]"
               :filedname="item.en_name"
             ></file-upload>
+            
           </el-form-item>
         </el-col>
       </el-row>
@@ -108,12 +111,14 @@
 import { getNowTime, failCheckPosition } from "@common/publicmethods";
 import ImageUpload from "./ImageUpload";
 import FileUpload from "./FileUpload";
+import MapForLonLat from "./MapForLonLat";
 import editor from '@components/common/editor/editor'
 export default {
   components: {
     ImageUpload,
     FileUpload,
-    editor
+    editor,
+    MapForLonLat
   },
   props: {
     showFiledData: {
@@ -177,6 +182,11 @@ export default {
           }
         }
       }
+    },
+    //当前选择地图经纬度获取
+    chageLatitudeNndLongitude(arg){
+      this.$set(this.form,'longitude',arg[0])
+      this.$set(this.form,'latitude',arg[1])
     },
     //点击关闭按钮
     closetForm() {

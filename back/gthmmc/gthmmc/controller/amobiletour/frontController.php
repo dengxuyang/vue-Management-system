@@ -19,7 +19,7 @@ class frontController extends SController{
 	function __construct() {
 		parent::__construct();
 		$this->SetWhiteList(array( 'queryDataOfResource','addDataOfResource',	'addDataOfResource', 'modifyDataOfResource', 'deleteDataOfResource',
-                'login','logout','addmember'
+                'login','logout','addmember','getOpenid'
 								));
 		date_default_timezone_set(PRC);
 		$this->WCommon = new WCommon();
@@ -258,7 +258,16 @@ class frontController extends SController{
 	    echo json_encode($response);
 	 	}
 
+		//获取用户微信openid
+		public function getOpenid(){
+			$appid="wx4c0aafd120543aec";
+			$secret="4440ce620c5031c0ac008357d4fad808";
+			$js_code=$this->controller->get_gp("js_code");
+			$weixin =  file_get_contents("https://api.weixin.qq.com/sns/jscode2session?appid=".$appid."&secret=".$secret."&js_code=".$js_code."&grant_type=authorization_code");//通过code换取网页授权access_token
 
+			//print_r ($weixin);
+			echo json_encode($weixin);
+		}
 
 
 

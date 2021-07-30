@@ -161,6 +161,7 @@ drop table if exists crdc_sosinfo;
 create table crdc_sosinfo(
   row_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   name  varchar(100) DEFAULT '',
+  openid  varchar(100) DEFAULT '',
   contact_details varchar(300) DEFAULT '',
   lon varchar(100) DEFAULT '',
   lat varchar(100) DEFAULT '',
@@ -191,16 +192,19 @@ insert into crdc_resourcefield(id, name, en_name, code, restraint, type, is_edit
 (8, '目的地id', 'destination_id', @code_, 0, 'int(10)', 0, 0, '', 0, '', now(), 0,0),
 (9, '创建时间', 'create_time', @code_, 0, 'datetime', 0, 0, '', 0, '', now(), 0,0),
 (10, '是否删除', 'is_delete', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0);
+(12, '微信标识', 'openid', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0);
 --    评论信息表
 drop table if exists crdc_comment;
 create table crdc_comment(
   row_id int(10) unsigned NOT NULL AUTO_INCREMENT,
   name  varchar(100) DEFAULT '',
+  source  varchar(100) DEFAULT '',   
   content text,
   preson  varchar(100) DEFAULT '',
   publish_date  varchar(100) DEFAULT '',
   depict varchar(300) DEFAULT '',
   image varchar(255) DEFAULT '', 
+  openid  varchar(100) DEFAULT '',
   is_check tinyint DEFAULT '0',  
   `create_time` datetime ,
   destination_id int(10),
@@ -226,7 +230,8 @@ insert into crdc_resourcefield(id, name, en_name, code, restraint, type, is_edit
 (9, '目的地id', 'destination_id', @code_, 0, 'int(10)', 0, 0, '', 0, '', now(), 0,0),
 (10, '创建时间', 'create_time', @code_, 0, 'datetime', 0, 0, '', 0, '', now(), 0,0),
 (11, '是否删除', 'is_delete', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0);
-
+(12, '微信标识', 'openid', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0),
+(13, '来源', 'source', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0);
 --    常用问答表
 drop table if exists crdc_qainfo;
 create table crdc_qainfo(
@@ -236,6 +241,7 @@ create table crdc_qainfo(
   content text,
   question varchar(300) DEFAULT '',
   answer varchar(300) DEFAULT '',
+  openid  varchar(100) DEFAULT '',
   is_check tinyint DEFAULT '0',  
   `create_time` datetime ,
   destination_id int(10),
@@ -259,8 +265,8 @@ insert into crdc_resourcefield(id, name, en_name, code, restraint, type, is_edit
 (8, '是否审核', 'is_check', @code_, 0, 'tinyint', 0, 0, '', 2, '', now(), 0,0),
 (9, '目的地id', 'destination_id', @code_, 0, 'int(10)', 0, 0, '', 0, '', now(), 0,0),
 (10, '创建时间', 'create_time', @code_, 0, 'datetime', 0, 0, '', 0, '', now(), 0,0),
-(11, '是否删除', 'is_delete', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0);
-
+(11, '是否删除', 'is_delete', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0),
+(12, '微信标识', 'openid', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0);
 --    常用电话表
 drop table if exists crdc_amt_telephone;
 create table crdc_amt_telephone(
@@ -427,6 +433,55 @@ insert into crdc_resourcefield(id, name, en_name, code, restraint, type, is_edit
 (4, '内容', 'content', @code_, 0, 'varchar', 1, 1, '', 5, '', now(), 0,0),
 (5, '图片', 'image', @code_, 0, 'varchar', 1, 0, '', 6, '', now(), 0,0),
 (5, '视频', 'image', @code_, 0, 'varchar', 1, 0, '', 9, '', now(), 0,0),
+(6, '是否审核', 'is_check', @code_, 0, 'tinyint', 0, 0, '', 2, '', now(), 0,0),
+(7, '目的地id', 'destination_id', @code_, 0, 'int(10)', 0, 0, '', 0, '', now(), 0,0),
+(8, '创建时间', 'create_time', @code_, 0, 'datetime', 0, 0, '', 0, '', now(), 0,0),
+(9, '是否删除', 'is_delete', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0);
+
+
+alter  table  crdc_consultation add   openid  varchar(100) DEFAULT '';
+alter  table crdc_complaint_case  add openid  varchar(100) DEFAULT '';
+
+
+set @code_ = 'consultation';
+insert into crdc_resourcefield(id, name, en_name, code, restraint, type, is_edit, is_intable, associate, show_type, remark, create_time, is_delete,is_statistics) values
+(12, '微信标识', 'openid', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0);
+
+set @code_ = 'complaint_case';
+insert into crdc_resourcefield(id, name, en_name, code, restraint, type, is_edit, is_intable, associate, show_type, remark, create_time, is_delete,is_statistics) values
+(12, '微信标识', 'openid', @code_, 0, 'tinyint', 0, 0, '', 0, '', now(), 0,0);
+
+
+
+
+
+--   旅游攻略
+drop table if exists crdc_amt_strategy;
+create table crdc_amt_strategy(
+  row_id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  name  varchar(100) DEFAULT '',
+  depict varchar(300) DEFAULT '',
+  content text,
+  image varchar(255) DEFAULT '', 
+  is_check tinyint DEFAULT '0',  
+  `create_time` datetime ,
+  destination_id int(10),
+  is_delete tinyint DEFAULT 0,
+  PRIMARY KEY(row_id)
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
+create unique index crdc_amt_strategy_row_id on crdc_amt_strategy(row_id);
+
+set @parent_id = 156;
+set @code_ = 'amt_strategy';
+ insert into crdc_resourcedirectory(name, code, table_name, description, parent_id, remark, is_edit, is_map, is_relation, is_statistics, create_time, is_delete,is_check) values
+('一机游旅游攻略表', @code_, 'crdc_amt_strategy', '一机游旅游攻略表', @parent_id, '', 1, 0, 0, 0, now(), 0,0);
+
+insert into crdc_resourcefield(id, name, en_name, code, restraint, type, is_edit, is_intable, associate, show_type, remark, create_time, is_delete,is_statistics) values
+(1, '行号', 'row_id', @code_, 0, 'int(10)', 0, 0, '', 0, '', now(), 0,0),
+(2, '名称', 'name', @code_, 0, 'varchar', 1, 1, '', 1, '', now(), 0,0),
+(3, '简介', 'depict', @code_, 0, 'varchar', 1, 1, '', 5, '', now(), 0,0),
+(4, '内容', 'content', @code_, 0, 'varchar', 1, 1, '', 5, '', now(), 0,0),
+(5, '图片', 'image', @code_, 0, 'varchar', 1, 0, '', 6, '', now(), 0,0),
 (6, '是否审核', 'is_check', @code_, 0, 'tinyint', 0, 0, '', 2, '', now(), 0,0),
 (7, '目的地id', 'destination_id', @code_, 0, 'int(10)', 0, 0, '', 0, '', now(), 0,0),
 (8, '创建时间', 'create_time', @code_, 0, 'datetime', 0, 0, '', 0, '', now(), 0,0),

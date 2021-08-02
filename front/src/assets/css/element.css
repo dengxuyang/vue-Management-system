@@ -50,7 +50,9 @@
 .avatar-uploader>.el-upload:hover {
     border-color: #0369e6;
 }
-
+.el-table__fixed::before, .el-table__fixed-right::before{
+    height: 0 !important;
+}
 /* .el-tabs__nav-wrap {
     background-color: #1d2334;
     height: 53px;
